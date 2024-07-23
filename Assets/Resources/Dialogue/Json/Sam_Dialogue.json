@@ -1,0 +1,59 @@
+[
+
+  {
+    "Sam": " Hii buddy ... how are you"
+  },
+  {
+    "You": " i am fine how about you "
+  },
+  {
+    "Sam": " fine .... you are looking in some trouble"
+  },
+  {
+    "Sam": " whats the problem"
+  },
+  {
+    
+    "option":[
+                {
+                  "1":[
+                       "finding vagitable cart...",
+                        {
+                         "You": "I am finding the  way to vagitable cart so can you help me "
+                        },
+                        {
+                         "Sam": " yes just follow this yellow board & you reach to your destination"
+                        },
+                        {
+                          "You": " Thanks man "
+                        },
+                        {
+                          "Sam": "your welcome ok Byy"
+                        },
+                        {
+                          "End of Dialogue" : "End of Dialogue"
+                        }                        
+                      ]
+                },
+                {
+                  "2":[
+                        "Nothing Bro....",
+                        {
+                          "You": "Nothing bro ill short it out on my own"
+                        },
+                        {
+                          "Sam": "Ok Than Byy "
+                        },
+                        {
+                          "You": "Byy thanks"
+                        },
+                        {
+                          "End of Dialogue" : "End of Dialogue"
+                        }
+                      ]
+                 }
+              ]
+ }
+  
+  
+]

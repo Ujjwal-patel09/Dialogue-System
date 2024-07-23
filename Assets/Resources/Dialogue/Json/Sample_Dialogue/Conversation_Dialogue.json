@@ -1,0 +1,25 @@
+[
+
+    {
+      "NPC": " Hii My name is NPC"
+    },
+    {
+      "NPC": " How are You"
+    },
+    {
+      "Player": " I am fine how about you"
+    },
+    {
+      "NPC": " I am also fine"
+    },
+    {
+      "Player": " ok then By"
+    },
+    {
+      "NPC" : "by nice day"
+    },
+    {
+      "End of Dialogue" : "End of Dialogue"
+    }
+  
+]

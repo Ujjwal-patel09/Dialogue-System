@@ -1,0 +1,80 @@
+[
+
+  {
+    "NPC": " Hii My name is NPC"
+  },
+  {
+    "NPC": " How are You"
+  },
+  {
+    "Player": " I am fine how about you"
+  },
+  {
+    "NPC": " I am also fine"
+  },
+  {
+    "NPC": "Who are you??"
+  },
+  {
+    
+    "option":[
+                {
+                  "1":[
+                       "I am Player.....",
+                        {
+                         "Player": " I am Player"
+                        },
+                        {
+                         "NPC": "Ok Than Thats Good. But What are You Doing??"
+                        },
+                        {
+                          "option": [
+                                     {
+                                       "1": [
+                                              "I am Playing game.....",
+                                              {
+                                                "Player": "Hey I am Playing game"
+                                              },
+                                              {
+                                                "End of Dialogue" : "End of Dialogue"
+                                              }
+                                            ]
+                                     },
+                                     {
+                                       "2": [
+                                              "I am Taking To you.....",
+                                              {
+                                                "Player": "Stupid i am Taking to you "
+                                              },
+                                              {
+                                                "NPC": "Thats Funny"
+                                              },
+                                              {
+                                                "End of Dialogue" : "End of Dialogue"
+                                              }
+                                            ]
+                                      }
+                                    ]
+                  
+                        }
+                      ]
+                },
+                {
+                  "2":[
+                        "I am Your Freind.....",
+                        {
+                          "Player": "I am you freind Buddy"
+                        },
+                        {
+                          "NPC": "But I Dont Know you "
+                        },
+                        {
+                          "End of Dialogue" : "End of Dialogue"
+                        }
+                      ]
+                 }
+              ]
+ }
+  
+  
+]
