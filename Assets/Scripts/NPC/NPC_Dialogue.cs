@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Security;
 using UnityEngine;
 
 public class NPC_Dialogue : MonoBehaviour,I_Interactable
@@ -12,10 +10,11 @@ public class NPC_Dialogue : MonoBehaviour,I_Interactable
         Bargaining_Dialogues
     }
     
-    public Dialogue_Type dialogue_Type;
-    public string path;
-    public bool isStartConversation = false;
-    public Animator animator;
+    [SerializeField] private Dialogue_Type dialogue_Type;
+    [SerializeField] private string path;
+    [SerializeField] private Animator animator;
+    
+    [HideInInspector]public bool isStartConversation = false;
     
     private GameObject palyer;
     private bool isLook;
@@ -52,44 +51,14 @@ public class NPC_Dialogue : MonoBehaviour,I_Interactable
         }else
         {
             transform.LookAt(null);
-            //transform.position = transform.position;
-        }
-
-        if(dialogue_Type == Dialogue_Type.conversation_Dialogues)
-        {
-            if(conversation_Dialogue.isAnimate)
-            {
-               animator.SetBool("isTalking",true);
-            }else
-            {
-                animator.SetBool("isTalking",false);
-            }       
-        }
-
-        if(dialogue_Type == Dialogue_Type.Option_Dialogues)
-        {
-            if(options_Dialogue.isAnimate)
-            {
-               animator.SetBool("isTalking",true);
-            }else
-            {
-                animator.SetBool("isTalking",false);
-            }       
         }
         
-        if(dialogue_Type == Dialogue_Type.Bargaining_Dialogues)
-        {
-            if(bargaining_Dialogue.isAnimate)
-            {
-               animator.SetBool("isTalking",true);
-            }else
-            {
-                animator.SetBool("isTalking",false);
-            }       
-        }
+        Talking_Animation();// For Animation
+
+        
     }
      
-    public void Interact()
+    public void Interact()// from interface
     {
       StartConversation();
     }
@@ -172,5 +141,41 @@ public class NPC_Dialogue : MonoBehaviour,I_Interactable
     {
         StopAllCoroutines();
         isLook = false;
+    }
+
+    private void Talking_Animation()
+    {
+        if(dialogue_Type == Dialogue_Type.conversation_Dialogues)
+        {
+            if(conversation_Dialogue.isAnimate)
+            {
+               animator.SetBool("isTalking",true);
+            }else
+            {
+                animator.SetBool("isTalking",false);
+            }       
+        }
+
+        if(dialogue_Type == Dialogue_Type.Option_Dialogues)
+        {
+            if(options_Dialogue.isAnimate)
+            {
+               animator.SetBool("isTalking",true);
+            }else
+            {
+                animator.SetBool("isTalking",false);
+            }       
+        }
+        
+        if(dialogue_Type == Dialogue_Type.Bargaining_Dialogues)
+        {
+            if(bargaining_Dialogue.isAnimate)
+            {
+               animator.SetBool("isTalking",true);
+            }else
+            {
+                animator.SetBool("isTalking",false);
+            }       
+        }
     }
 }

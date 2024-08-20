@@ -4,10 +4,11 @@ using TMPro;
 
 public class Conversation_Dialogue : MonoBehaviour
 {
-    public GameObject DialogueBox;
-    public TextMeshProUGUI DispalayText;
-    public bool inDialogue = false;
-    public bool isAnimate;
+    [SerializeField]private GameObject DialogueBox;
+    [SerializeField]private TextMeshProUGUI DispalayText;
+
+    [HideInInspector]public bool inDialogue = false;
+    [HideInInspector]public bool isAnimate;
 
     private JsonData dialogue;
     private int index;
@@ -35,7 +36,13 @@ public class Conversation_Dialogue : MonoBehaviour
         if(inDialogue)
         {
             JsonData Line = dialogue[index];
-            if(Line[0].ToString() == "End of Dialogue")// to end the conversation//
+
+            foreach (JsonData key in Line.Keys)
+            {
+              speakerName = key.ToString();// for getting the speaker name from dialogue//
+            }
+
+            if(speakerName == "End of Dialogue")// to end the conversation//
             {
                isAnimate = false;
                inDialogue = false;
@@ -46,10 +53,6 @@ public class Conversation_Dialogue : MonoBehaviour
             }
             
             DialogueBox.SetActive(true);
-            foreach (JsonData key in Line.Keys)
-            {
-              speakerName = key.ToString();// for geting the speaker name from dialogue//
-            }
             
             DispalayText.text = speakerName + ": " + Line[0].ToString();
             index++;

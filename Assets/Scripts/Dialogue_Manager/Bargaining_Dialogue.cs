@@ -5,12 +5,13 @@ using TMPro;
 
 public class Bargaining_Dialogue : MonoBehaviour
 {
-    public GameObject DialogueBox;
-    public TextMeshProUGUI DispalayText;
-    public GameObject Button;
-    public GameObject slider_object;
-    public bool inDialogue;
-    public bool isAnimate;
+    [SerializeField] private GameObject DialogueBox;
+    [SerializeField] private TextMeshProUGUI DispalayText;
+    [SerializeField] private GameObject Button;
+    [SerializeField] private GameObject slider_object;
+    
+    [HideInInspector]public bool inDialogue;
+    [HideInInspector]public bool isAnimate;
 
     private JsonData dialogue;
     private JsonData Line;

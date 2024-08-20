@@ -5,11 +5,12 @@ using TMPro;
 
 public class Options_Dialogue : MonoBehaviour
 {
-    public GameObject DialogueBox;
-    public TextMeshProUGUI DispalayText;
-    public GameObject[] Buttons;
-    public bool inDialogue;
-    public bool isAnimate = false;
+    [SerializeField] private GameObject DialogueBox;
+    [SerializeField] private TextMeshProUGUI DispalayText;
+    [SerializeField] private GameObject[] Buttons;
+    
+    [HideInInspector]public bool inDialogue;
+    [HideInInspector]public bool isAnimate = false;
 
     private JsonData dialogue;
     private JsonData Line;
