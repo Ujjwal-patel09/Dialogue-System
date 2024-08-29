@@ -1,143 +1,103 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using LitJson;
 using TMPro;
 
-public class Bargaining_Dialogue : MonoBehaviour
+public class Bargaining_Dialogue : Dialogue_Base_Class
 {
-    [SerializeField] private GameObject DialogueBox;
-    [SerializeField] private TextMeshProUGUI DispalayText;
-    [SerializeField] private GameObject Button;
-    [SerializeField] private GameObject slider_object;
-    
-    [HideInInspector]public bool inDialogue;
-    [HideInInspector]public bool isAnimate;
+    [SerializeField] private GameObject SubmitButton;// Button Gameobject to submit the offer
+    [SerializeField] private Slider offerSlider;      // Slider for player's offer
+    [SerializeField] public TextMeshProUGUI SliderText; // Text to show the player's current offer
 
-    private JsonData dialogue;
-    private JsonData Line;
-    private int index;
-    private string speaker;
-    private JsonData CurrentLayer;
+    private Button _submitButton; // Button Component Form Sbmit Button Gameobject//
+    private TextMeshProUGUI _SubmitButtonText;// Button Text //
 
-    Slider slider; 
-    TextMeshProUGUI Slider_text;
-
-    private void Start() 
-    { 
-       DialogueBox.SetActive(false); 
-       Dactivate_Button_Slider();
+    private void Awake()
+    {
+        _submitButton = SubmitButton.GetComponent<Button>();
+        _SubmitButtonText = SubmitButton.GetComponentInChildren<TextMeshProUGUI>();
     }
 
-    public void LoadDialogue(string path)// for Load dialogue from given path// this function is called from "NPC_Dialogue" script//
+    protected override void Start()
     {
-        if(!inDialogue)
-        {
-           index = 0;// dialogue line number
-           var JsonTextFile = Resources.Load<TextAsset>("Dialogue/"+ path);// call dialogue from Resources/Dialogue.. "this are predifine from assest folder" / path.
-           dialogue = JsonMapper.ToObject(JsonTextFile.text);
-           CurrentLayer = dialogue;
-           inDialogue = true;
-        }
+        base.Start();
+        SetSliderActive(false);
     }
 
-    public void  PrintLine() // for printing line from load data //this function is called from "NPC_Dialogue" script//
+    protected override IEnumerator DisplayConversation(int dialogueIndex)
     {
-        if(inDialogue)
+        if (dialogueData != null && dialogueIndex >= 0 /* Use this parameter to end conversation by -1 in dialogue jsonfile */ && dialogueIndex < dialogueData.dialogues.Length)
         {
-            Line = CurrentLayer[index];
-            foreach (JsonData key in Line.Keys)
+            DialogueBox.SetActive(true);
+            isAnimate = true;
+            isLook = true;
+            
+            Dialogue dialogue = dialogueData.dialogues[dialogueIndex];
+
+            // Display each line of dialogue
+            foreach (string line in dialogue.lines)
             {
-                speaker = key.ToString();// for geting the speaker name from dialogue//
+                DisplayText.text = dialogue.character + ": " + line;
+                yield return new WaitForSeconds(3); // Wait for 2 seconds between lines
             }
 
-            if(speaker == "End of Dialogue")// to end the conversation//
+            // Display slider if options exist
+            if (dialogue.BarganningOptions != null && dialogue.BarganningOptions.Length > 0)
             {
+                DialogueBarganning currentOption;
+                currentOption = dialogue.BarganningOptions[0]; // Assuming one option here for simplicity
+                SetSliderActive(true);
                 isAnimate = false;
-                inDialogue = false;
-                DispalayText.text = "";
-                DialogueBox.SetActive(false);
-                PlayerInteraction.instance.isInteract = false;
-                return;
-            }
-            else if(speaker == "option")// for geting options//
-            {
-                isAnimate = false;
-                PlayerInteraction.instance.isInteract = true;
-                DispalayText.text = "ok ill give you";
-                JsonData option = Line[0];
-                Activate_Button_Slider(option[0],option[1]);// get all option in dialogue if have more add more//
-                    
+                DisplayText.text = "You : ok Ill give you";
+                offerSlider.value = (currentOption.minAmount + currentOption.maxAmount) / 2;// Set the slider to the midpoint
+                _submitButton.onClick.AddListener(() => OnOfferMade(currentOption));// onClick button//
             }
             else
             {
-                DialogueBox.SetActive(true);// for display dialogue//
-                DispalayText.text = speaker + ": " + Line[0].ToString();
-                index++;
+                StartConversation(dialogue.nextDialogueIndex); // The nextDialogueIndex used here is under "**Dialogue class**".
             }
-        }  
-    }
-
-    // Buttons function //
-    void OnClick_Button(JsonData choice1,JsonData choice2)// this function is used for clicking buttons//
-    {
-        float maxammount;
-        if(float.TryParse(choice1[0][0].ToString(), out maxammount))// getting the first line of dialogue which difines a number that is 
-                                                                    //maxposiible number for bargaining and convert into float.//
-        {
-          if(slider.value >= maxammount/2)// selecting accept option//
-          {
-            inDialogue = true;
-            CurrentLayer = choice1[0];
-            index = 1;
-            //PrintLine();
-            Dactivate_Button_Slider();
-          }
-          else
-          {
-            inDialogue = true;
-            CurrentLayer = choice2[0];// select dinied option//
-            index = 0;
-            //PrintLine();
-            Dactivate_Button_Slider();
-          }
-
         }
-       
+        else
+        {
+           EndOfConversation();
+        }
     }
 
-    private void Dactivate_Button_Slider()// to dactivate buttton and slider//
+    private void OnOfferMade(DialogueBarganning option)
     {
-        Button.SetActive(false);
-        slider_object.SetActive(false);
-        Button.GetComponent<Button>().onClick.RemoveAllListeners();
+        SetSliderActive(false);
+        int playerOffer = Mathf.RoundToInt(offerSlider.value);// To make offer it int value only //
+
+        if (playerOffer < option.minAmount)
+        {
+            StartConversation(option.responseLow_Index);// relpy if player offers in less than min ammount//  
+        }
+        else if (playerOffer >= option.minAmount && playerOffer <= option.maxAmount)
+        {
+            StartConversation(option.DealDone_Index);
+            return; // Early return as the offer was accepted
+        }
     }
 
-    private void Activate_Button_Slider(JsonData choice1 ,JsonData choice2)// to activate buuton and slider//
+    private void SetSliderActive(bool isActive)
     {
-        Button.SetActive(true);
-        Button.GetComponentInChildren<TextMeshProUGUI>().text = "Continue";
-
-        slider_object.SetActive(true);
-        slider = slider_object.GetComponent<Slider>();
-        Slider_text = slider.GetComponentInChildren<TextMeshProUGUI>();
-        updateSilder(slider.value);
-        slider.onValueChanged.AddListener(updateSilder);
-
-        Button.GetComponent<Button>().onClick.AddListener(delegate{OnClick_Button(choice1,choice2);}); // onclick button//
-        
-       
-    }
-    private void updateSilder(float var)
-    {
-        Slider_text.text = slider.value.ToString();
+        offerSlider.gameObject.SetActive(isActive);
+        SliderText.gameObject.SetActive(isActive);
+        SubmitButton.gameObject.SetActive(isActive);
+        _SubmitButtonText.text = "Continue";
+        _submitButton.onClick.RemoveAllListeners();
     }
 
-    public void Esc_Button()// used in esc button onclick to escape from conversation //   
+    protected override void EndOfConversation()
     {
-        isAnimate = false;
-        inDialogue = false;
-        DispalayText.text = "";
-        DialogueBox.SetActive(false);
-        PlayerInteraction.instance.isInteract = false;
+        base.EndOfConversation();
+        SetSliderActive(false);
+    }
+
+    //****** slider event function ******* //
+    public void OnSliderValueChanged()// assingn the function in  slider onvalue change event //
+    {
+        SliderText.text = offerSlider.value.ToString() + "RS";
     }
 }

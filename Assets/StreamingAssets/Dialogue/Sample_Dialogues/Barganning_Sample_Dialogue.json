@@ -1,0 +1,55 @@
+{
+  "dialogues": [
+      {
+        "Dialogue_Index" : 0,
+        "character": "Merchant",
+        "lines": ["I'll give you this sword for 100 gold coins. What’s your offer?"],
+        "BarganningOptions": [
+            {
+                "minAmount": 50,
+                "maxAmount": 100,
+                "responseLow_Index": 1,
+                "DealDone_Index": 3
+            }
+        ]
+      },
+      {
+        "Dialogue_Index" : 1,
+        "character": "Merchant",
+        "lines": ["No thats not enough make a fair price"],
+        "BarganningOptions": [
+            {
+                "minAmount": 50,
+                "maxAmount": 100,
+                "responseLow_Index": 2,
+                "DealDone_Index":3
+            }
+        ]
+      },
+      {
+        "Dialogue_Index" : 2,
+        "character": "Merchant",
+        "lines": [" Make slightly high price"],
+        "BarganningOptions": [
+            {
+                "minAmount": 50,
+                "maxAmount": 100,
+                "responseLow_Index": 4,
+                "DealDone_Index": 3
+            }
+        ]
+      },
+      {
+        "Dialogue_Index" : 3,
+        "character": "Merchant",
+        "lines": ["Pleasure doing business with you!"],
+        "BarganningOptions": []
+      },
+      {
+        "Dialogue_Index" : 4,
+        "character": "Merchant",
+        "lines": ["Sorry. I'm not interested to selling you in this low price"],
+        "BarganningOptions": []
+    }
+  ]
+}

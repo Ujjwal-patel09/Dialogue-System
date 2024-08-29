@@ -1,70 +1,31 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using LitJson;
-using TMPro;
 
-public class Conversation_Dialogue : MonoBehaviour
+public class Conversation_Dialogue : Dialogue_Base_Class
 {
-    [SerializeField]private GameObject DialogueBox;
-    [SerializeField]private TextMeshProUGUI DispalayText;
-
-    [HideInInspector]public bool inDialogue = false;
-    [HideInInspector]public bool isAnimate;
-
-    private JsonData dialogue;
-    private int index;
-    private string speakerName;
-    
-
-    private void Start() 
+    protected override IEnumerator DisplayConversation(int dialogueIndex)
     {
-        DialogueBox.SetActive(false);
-    }
-
-    public void LoadDialogue(string path)// for Load dialogue from given path// this function is called from "NPC_Dialogue" script//
-    {
-        if(!inDialogue)
+      if (dialogueData != null && dialogueIndex >= 0)
         {
-           index = 0;
-           var JsonTextFile = Resources.Load<TextAsset>("Dialogue/"+ path);// call dialogue from Resources/Dialogue.. "this are predifine from assest folder" / path.
-           dialogue = JsonMapper.ToObject(JsonTextFile.text);
-           inDialogue = true;
-        }
-    }
-
-    public void  PrintLine()// for printing line from load data //this function is called from "NPC_Dialogue" script//
-    {
-        if(inDialogue)
-        {
-            JsonData Line = dialogue[index];
-
-            foreach (JsonData key in Line.Keys)
-            {
-              speakerName = key.ToString();// for getting the speaker name from dialogue//
-            }
-
-            if(speakerName == "End of Dialogue")// to end the conversation//
-            {
-               isAnimate = false;
-               inDialogue = false;
-               DialogueBox.SetActive(false);
-               DispalayText.text = "";
-               PlayerInteraction.instance.isInteract = false;
-               return;
-            }
-            
             DialogueBox.SetActive(true);
+            isAnimate = true;
+            isLook = true;
             
-            DispalayText.text = speakerName + ": " + Line[0].ToString();
-            index++;
-        }   
-    }
+            foreach (Dialogue dialogue in dialogueData.dialogues)
+            {
+                foreach (string line in dialogue.lines)
+                {
+                    DisplayText.text = dialogue.character + ": " + line;
+                    yield return new WaitForSeconds(2); // Wait for 1 seconds between lines
+                }
+            }
 
-    public void Esc_Button()// used in esc button onclick to escape from conversation //   
-    {
-        isAnimate = false;
-        inDialogue = false;
-        DispalayText.text = "";
-        DialogueBox.SetActive(false);
-        PlayerInteraction.instance.isInteract = false;
+            EndOfConversation();// trigger when when there is no dialogue left
+        }
+        else
+        {
+            Debug.LogError("Dialogue data is null.");
+        }
     }
 }

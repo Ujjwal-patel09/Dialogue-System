@@ -1,0 +1,39 @@
+{
+    "dialogues": [
+      {
+        "Dialogue_Index": 0,
+        "character": "You",
+        "lines": [
+          "Hey NPC, Hiii?"
+        ]
+      },
+      {
+        "Dialogue_Index": 1,
+        "character": "NPC",
+        "lines": [
+          "Hello"
+        ]
+      },
+      {
+        "Dialogue_Index": 2,
+        "character": "You",
+        "lines": [
+          "Plzz tell us about you someting"
+        ]
+      },
+      {
+        "Dialogue_Index": 3,
+        "character": "NPC",
+        "lines": [
+          "i am Npc "
+        ]
+      },
+      {
+        "Dialogue_Index": 4,
+        "character": "You",
+        "lines": [
+          "ok"
+        ]
+      }
+    ]
+}

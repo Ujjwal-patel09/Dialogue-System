@@ -1,0 +1,36 @@
+{
+  "dialogues": [
+    {
+      "character": "You",
+      "lines": [
+        "Hey NPC, Hiii?"
+      ]
+    },
+    {
+      "character": "NPC",
+      "lines": [
+        "Hello"
+      ]
+    },
+    {
+      "character": "You",
+      "lines": [
+        "Plzz tell you about you someting"
+      ]
+    },
+    {
+      "character": "NPC",
+      "lines": [
+        "i am Npc, What about you??  "
+      ]
+    },
+    {
+      "character": "You",
+      "lines": [
+        "I am Player",
+        "ok than, Nice to meet you"
+      ]
+    }
+  ]
+}
+

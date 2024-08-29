@@ -11,171 +11,68 @@ public class NPC_Dialogue : MonoBehaviour,I_Interactable
     }
     
     [SerializeField] private Dialogue_Type dialogue_Type;
-    [SerializeField] private string path;
+    [SerializeField] private string jsonFileName;// Write file name with .json extention//
     [SerializeField] private Animator animator;
     
-    [HideInInspector]public bool isStartConversation = false;
-    
-    private GameObject palyer;
-    private bool isLook;
-    private Conversation_Dialogue conversation_Dialogue = null;
-    private Options_Dialogue options_Dialogue = null;
-    private Bargaining_Dialogue bargaining_Dialogue = null;
+    private GameObject player;
+    private GameObject dialogueManager;
+    private Dialogue_Base_Class CurrentDialogueType;
 
+    private void Awake() 
+    {
+        dialogueManager = GameObject.FindGameObjectWithTag("Dialogue_Manager");
 
-    private void Start() 
-    { 
-        palyer = GameObject.FindGameObjectWithTag("Player");
-
-        if(dialogue_Type == Dialogue_Type.conversation_Dialogues)
+        switch (dialogue_Type)
         {
-            conversation_Dialogue = GameObject.FindGameObjectWithTag("Dialogue_Manager").GetComponent<Conversation_Dialogue>();
+            case Dialogue_Type.conversation_Dialogues:
+                CurrentDialogueType = dialogueManager.GetComponent<Conversation_Dialogue>();
+                break;
+            case Dialogue_Type.Option_Dialogues:
+                CurrentDialogueType = dialogueManager.GetComponent<Options_Dialogue>();
+                break;
+            case Dialogue_Type.Bargaining_Dialogues:
+                CurrentDialogueType = dialogueManager.GetComponent<Bargaining_Dialogue>();
+                break;
         }
 
-        if(dialogue_Type == Dialogue_Type.Option_Dialogues)
-        {
-            options_Dialogue = GameObject.FindGameObjectWithTag("Dialogue_Manager").GetComponent<Options_Dialogue>();        
-        }
-
-        if(dialogue_Type == Dialogue_Type.Bargaining_Dialogues)
-        {
-            bargaining_Dialogue = GameObject.FindGameObjectWithTag("Dialogue_Manager").GetComponent<Bargaining_Dialogue>();
-        }
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     private void Update() 
     {
-        if(isLook)// for looking npc toward player//
+        if(CurrentDialogueType.isLook)// for looking npc toward player//
         {
-            transform.LookAt(palyer.transform.position);
+            transform.LookAt(player.transform.position);
         }else
         {
             transform.LookAt(null);
         }
         
         Talking_Animation();// For Animation
-
         
     }
      
-    public void Interact()// from interface
+    public void Interact()// interface function  within " I_Interactable" & call from player interaction script
     {
       StartConversation();
     }
 
-    public void  StartConversation()
+    private void  StartConversation()
     {
-        if(dialogue_Type == Dialogue_Type.conversation_Dialogues)
+        if (CurrentDialogueType != null)
         {
-            conversation_Dialogue.LoadDialogue(path);
-            DisplayDialogue();
+            CurrentDialogueType.LoadDialogue(jsonFileName);
         }
-
-        if(dialogue_Type == Dialogue_Type.Option_Dialogues)
-        {
-            options_Dialogue.LoadDialogue(path);
-            DisplayDialogue();
-        }
-        
-        if(dialogue_Type == Dialogue_Type.Bargaining_Dialogues)
-        {
-            bargaining_Dialogue.LoadDialogue(path);
-            DisplayDialogue();
-        }
-    }
-
-    private void DisplayDialogue()
-    {   
-        isLook = true;// for looking npc toward player//
-        if(dialogue_Type == Dialogue_Type.conversation_Dialogues)
-        {
-           if(conversation_Dialogue.inDialogue)
-           {
-                conversation_Dialogue.isAnimate = true;
-                conversation_Dialogue.PrintLine();
-                StartCoroutine(PrintNextLine());
-           }
-           else
-           {
-                EndOfConversation();
-           }
-        }
-
-        if(dialogue_Type == Dialogue_Type.Option_Dialogues)
-        {   
-            if(options_Dialogue.inDialogue)
-            {
-                options_Dialogue.isAnimate = true;
-                options_Dialogue.PrintLine();
-                StartCoroutine(PrintNextLine());
-            }
-            else
-            {
-                EndOfConversation();
-            }
-        }
-
-        if(dialogue_Type == Dialogue_Type.Bargaining_Dialogues)
-        {   
-            if( bargaining_Dialogue.inDialogue)
-            {
-                bargaining_Dialogue.isAnimate = true;
-                bargaining_Dialogue.PrintLine();
-                StartCoroutine(PrintNextLine());
-            }
-            else
-            {
-                EndOfConversation();
-            }
-        }
-
-    }
-
-    IEnumerator PrintNextLine()
-    {
-      yield return new WaitForSeconds(2.5f);
-      DisplayDialogue();  
-    }
-
-    void EndOfConversation()
-    {
-        StopAllCoroutines();
-        isLook = false;
     }
 
     private void Talking_Animation()
     {
-        if(dialogue_Type == Dialogue_Type.conversation_Dialogues)
+        if(CurrentDialogueType.isAnimate)
         {
-            if(conversation_Dialogue.isAnimate)
-            {
-               animator.SetBool("isTalking",true);
-            }else
-            {
-                animator.SetBool("isTalking",false);
-            }       
-        }
-
-        if(dialogue_Type == Dialogue_Type.Option_Dialogues)
+           animator.SetBool("isTalking",true);
+        }else
         {
-            if(options_Dialogue.isAnimate)
-            {
-               animator.SetBool("isTalking",true);
-            }else
-            {
-                animator.SetBool("isTalking",false);
-            }       
-        }
-        
-        if(dialogue_Type == Dialogue_Type.Bargaining_Dialogues)
-        {
-            if(bargaining_Dialogue.isAnimate)
-            {
-               animator.SetBool("isTalking",true);
-            }else
-            {
-                animator.SetBool("isTalking",false);
-            }       
+            animator.SetBool("isTalking",false);
         }
     }
 }

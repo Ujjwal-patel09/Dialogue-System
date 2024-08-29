@@ -1,0 +1,86 @@
+{
+  "dialogues": [
+    {
+      "Dialogue_Index":0,
+      "character": "NPC",
+      "lines": [
+        "Hello! Who are you??"
+      ],
+      "options": [
+        {
+          "text": "I am Player.",
+          "nextDialogueIndex": 1
+        },
+        {
+          "text": "not interested.",
+          "nextDialogueIndex": 5
+        }
+      ]
+    },
+    {
+      "Dialogue_Index":1,
+      "character": "NPC",
+      "lines": [
+        "So you are New Here",
+        "Would you be my friend."
+      ],
+      "options": [
+        {
+          "text": "Yes Buddy.",
+          "nextDialogueIndex": 2
+        },
+        {
+          "text": "NO, i am not interested.",
+          "nextDialogueIndex": 5
+        }
+      ]
+    },
+    {
+      "Dialogue_Index":2,
+      "character": "NPC",
+      "lines": [
+        "you are looking in some trouble",
+        " whats the problem"
+      ],
+      "options": [
+        {
+          "text": "finding vagitable cart",
+          "nextDialogueIndex": 3
+        },
+        {
+          "text": "Nothing Buddy",
+          "nextDialogueIndex": 5
+        }
+      ]
+    },
+    {
+      "Dialogue_Index":3,
+      "character": "NPC",
+      "lines":[
+        "ok just follow this yellow board & you reach to your destination"
+      ],
+      "options": [],
+      "nextDialogueIndex": 4
+    },
+    {
+      "Dialogue_Index":4,
+      "character": "You",
+      "lines":[
+        "Thank Buddy"
+      ],
+      "options": [],
+      "nextDialogueIndex": 5
+    },
+    {
+      "Dialogue_Index":5,
+      "character": "NPC",
+      "lines": [
+        "ok than Byy."
+      ],
+      "options": [],
+      "nextDialogueIndex": -1,
+      "NOTE" : "this -1 represented the end of conversation through script"
+    }
+
+  ]
+}

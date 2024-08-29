@@ -1,95 +1,73 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using LitJson;
 using TMPro;
 
-public class Options_Dialogue : MonoBehaviour
+public class Options_Dialogue :  Dialogue_Base_Class
 {
-    [SerializeField] private GameObject DialogueBox;
-    [SerializeField] private TextMeshProUGUI DispalayText;
-    [SerializeField] private GameObject[] Buttons;
-    
-    [HideInInspector]public bool inDialogue;
-    [HideInInspector]public bool isAnimate = false;
+    [SerializeField] private GameObject[] OptionButtons;
 
-    private JsonData dialogue;
-    private JsonData Line;
-    private int index;
-    private string speaker;
-    private JsonData CurrentLayer;
-
-    private void Start() 
-    { 
-       DialogueBox.SetActive(false); 
-       Dactivate_Buttons();
+    protected override void Start()
+    {
+        base.Start();
+        Dactivate_Buttons();
     }
 
-    public void LoadDialogue(string path)// for Load dialogue from given path// this function is called from "NPC_Dialogue" script//
+    protected override IEnumerator DisplayConversation(int dialogueIndex)
     {
-        if(!inDialogue)
+       if (dialogueData != null && dialogueIndex >= 0 && dialogueIndex < dialogueData.dialogues.Length)
         {
-           index = 0;// dialogue line number
-           var JsonTextFile = Resources.Load<TextAsset>("Dialogue/"+ path);// call dialogue from Resources/Dialogue.. "this are predifine from assest folder" / path.
-           dialogue = JsonMapper.ToObject(JsonTextFile.text);
-           CurrentLayer = dialogue;
-           inDialogue = true;
-        }
-    }
+            DialogueBox.SetActive(true);
+            isAnimate = true;
+            isLook = true;
 
-    public void  PrintLine()// for printing line from load data //this function is called from "NPC_Dialogue" script//
-    {
-        if(inDialogue)
-        {
-            Line = CurrentLayer[index];
-            foreach (JsonData key in Line.Keys)
+            Dialogue dialogue = dialogueData.dialogues[dialogueIndex];// coverting dialogue from dialogueData.dialogues arreys according to index//
+
+            // Display each line of dialogue
+            foreach (string line in dialogue.lines)
             {
-                speaker = key.ToString();// for geting the speaker name from dialogue//
+                DisplayText.text = dialogue.character + ": " + line;
+                yield return new WaitForSeconds(2); // Wait for 2 seconds between lines
             }
 
-            if(speaker == "End of Dialogue")// to end the conversation//
+            // Display options if any
+            if (dialogue.options != null && dialogue.options.Length > 0)
             {
                 isAnimate = false;
-                inDialogue = false;
-                DispalayText.text = "";
-                DialogueBox.SetActive(false);
-                PlayerInteraction.instance.isInteract = false;
-                return;
-            }
-            else if(speaker == "option")// for geting options//
-            {
-                isAnimate = false;
-                PlayerInteraction.instance.isInteract = true;
-                DispalayText.text = "";
-                JsonData options = Line[0];
-                for (int optionNumber = 0; optionNumber < options.Count; optionNumber++)// loop through all option and assign with buttons// 
+                for (int optionNumber = 0; optionNumber < dialogue.options.Length; optionNumber++)// loop through all option and assign with buttons// 
                 {
-                   Activate_Buttons(Buttons[optionNumber],options[optionNumber]);
+                   Activate_Buttons(OptionButtons[optionNumber],dialogue.options[optionNumber]);
                 }
             }
             else
             {
-                DialogueBox.SetActive(true);// for display dialogue//
-                DispalayText.text = speaker + ": " + Line[0].ToString();
-                index++;
+                StartConversation(dialogue.nextDialogueIndex); // The nextDialogueIndex used here is under "**Dialogue class**" and
+                                                               // in line 99 nextDialogueIndex variable is under  "**DialogueOption class**"//
             }
-        }  
+        }
+        else
+        {
+            EndOfConversation(); // End the dialogue if dialogue.nextDialogueIndex is -1 in line 82// 
+        }
     }
 
-    
-
-    // Buttons function //
-    void OnClick_Button(JsonData choice)// this function is used for clicking buttons//
+    private void  Activate_Buttons(GameObject button , DialogueOption dialogueOption)
     {
-        CurrentLayer = choice[0];
-        index = 1;
-        inDialogue = true;
-        isAnimate = true;
+        button.SetActive(true);
+        button.GetComponentInChildren<TextMeshProUGUI>().text = dialogueOption.text;
+        button.GetComponent<Button>().onClick.AddListener(()=> OnOptionSelected(dialogueOption.nextDialogueIndex));// onclick button //
+    }
+
+    private void OnOptionSelected(int nextDialogueIndex)
+    {
         Dactivate_Buttons();
+        StartConversation(nextDialogueIndex);
     }
 
-    private void Dactivate_Buttons()// to dactivate butttons //
+    private void Dactivate_Buttons()
     {
-        foreach (GameObject button in Buttons)
+        foreach (GameObject button in OptionButtons)
         {
             button.SetActive(false);
             button.GetComponentInChildren<TextMeshProUGUI>().text = "";
@@ -97,19 +75,10 @@ public class Options_Dialogue : MonoBehaviour
         }
     }
 
-    private void Activate_Buttons(GameObject button , JsonData Choice)// to activate buutons//
+    protected override void EndOfConversation()
     {
-        button.SetActive(true);
-        button.GetComponentInChildren<TextMeshProUGUI>().text = Choice[0][0].ToString();
-        button.GetComponent<Button>().onClick.AddListener(delegate{OnClick_Button(Choice);});// onclick button//
+        base.EndOfConversation();
+        Dactivate_Buttons();
     }
-    
-    public void Esc_Button()// used in esc button onclick to escape from conversation //   
-    {
-        isAnimate = false;
-        inDialogue = false;
-        DispalayText.text = "";
-        DialogueBox.SetActive(false);
-        PlayerInteraction.instance.isInteract = false;
-    }
+
 }

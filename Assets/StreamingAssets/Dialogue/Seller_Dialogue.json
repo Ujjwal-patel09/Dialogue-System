@@ -1,0 +1,99 @@
+{
+  "dialogues": [
+      {
+        "Dialogue_Index" : 0,
+        "character": "Seller",
+        "lines": ["welcome my freind come take some fersh vagies."],
+        "BarganningOptions": [],
+        "nextDialogueIndex": 1
+      },
+      {
+        "Dialogue_Index" : 1,
+        "character": "You",
+        "lines": ["ok what is price of tomatos."],
+        "BarganningOptions": [],
+        "nextDialogueIndex": 2
+      },
+      {
+        "Dialogue_Index" : 2,
+        "character": "Seller",
+        "lines": ["Its only 100rs per kg."],
+        "BarganningOptions": [],
+        "nextDialogueIndex": 3
+      },
+      {
+        "Dialogue_Index" : 3,
+        "character": "You",
+        "lines": ["Thats too much make a fair price"],
+        "BarganningOptions": [],
+        "nextDialogueIndex": 4
+      },
+      {
+        "Dialogue_Index" : 4,
+        "character": "Seller",
+        "lines": ["its fair and at market rate,","ok whats your offer"],
+        "BarganningOptions": [
+            {
+                "minAmount": 70,
+                "maxAmount": 100,
+                "responseLow_Index": 5,
+                "DealDone_Index":7
+            }
+        ]
+      },
+      {
+        "Dialogue_Index" : 5,
+        "character": "Seller",
+        "lines": ["Thats not enough", "Make a fair price"],
+        "BarganningOptions": [
+            {
+                "minAmount": 70,
+                "maxAmount": 100,
+                "responseLow_Index": 6,
+                "DealDone_Index":7
+            }
+        ]
+      },
+      {
+        "Dialogue_Index" : 6,
+        "character": "Seller",
+        "lines": [" Still not enough","Make slightly high price"],
+        "BarganningOptions": [
+            {
+                "minAmount": 70,
+                "maxAmount": 100,
+                "responseLow_Index": 10,
+                "DealDone_Index": 7
+            }
+        ]
+      },
+      {
+        "Dialogue_Index" : 7,
+        "character": "Seller",
+        "lines": ["ok its deal."],
+        "BarganningOptions": [],
+        "nextDialogueIndex": 8
+      },
+      {
+        "Dialogue_Index" : 8,
+        "character": "You",
+        "lines": ["ok, Pack it."],
+        "BarganningOptions": [],
+        "nextDialogueIndex": 9
+      },
+      {
+        "Dialogue_Index" : 9,
+        "character": "Seller",
+        "lines": ["Pleasure doing business with you!"],
+        "BarganningOptions": [],
+        "nextDialogueIndex": -1 
+      },
+      {
+        "Dialogue_Index" : 10,
+        "character": "Seller",
+        "lines": ["Sorry. I'm not interested to selling you in this low price"],
+        "BarganningOptions": [],
+        "nextDialogueIndex": -1
+      }
+  ]
+}

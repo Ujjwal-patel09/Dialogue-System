@@ -15,18 +15,19 @@ public class PlayerInteraction : MonoBehaviour
    #endregion
    
     // for player raycast variables for identifies npc//
-    public Transform interactor_Source_Cam;
-    public float interact_range;
-    public bool isInteract;
-    public bool inPause;
+    [SerializeField]public Transform interactor_Source_Cam;
+    [SerializeField]public float interact_range;
+    
+    [HideInInspector]public bool isInteract;
+    [HideInInspector]public bool inPause;
 
-    FPS_Player_Movement fPS_Player_Movement;
-    Camera_Mouse_Look camera_Mouse_Look;
+    private FPS_Player_Movement fPS_Player_Movement;
+    private Camera_Mouse_Look camera_Mouse_Look;
 
     private void Start() 
     {
       fPS_Player_Movement = GetComponent<FPS_Player_Movement>();
-      camera_Mouse_Look =  GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera_Mouse_Look>();
+      camera_Mouse_Look =  Camera.main.GetComponent<Camera_Mouse_Look>();
          
     }
 
@@ -37,12 +38,12 @@ public class PlayerInteraction : MonoBehaviour
             movement_CameraLook(true);
             if(Input.GetKeyDown(KeyCode.E))
             {
-                Ray r = new Ray(interactor_Source_Cam.position,interactor_Source_Cam.forward);
-                if(Physics.Raycast(r,out RaycastHit Hit_Info,interact_range))
+                Ray ray = new Ray(interactor_Source_Cam.position,interactor_Source_Cam.forward);
+                if(Physics.Raycast(ray,out RaycastHit Hit_Info,interact_range))// cast a ray from player camera in forward and geeting hit info //
                 {
-                    if(Hit_Info.collider.gameObject.TryGetComponent(out I_Interactable i_Interactable))
+                    if(Hit_Info.collider.gameObject.TryGetComponent(out I_Interactable i_Interactable))// hit info collides with I_Interactable, so out I_Interactable//
                     {
-                       i_Interactable.Interact();
+                       i_Interactable.Interact();// This i_Interactable interface is attached with all the object or npc whom player will interact //
                        isInteract = true;
                        movement_CameraLook(false);
                     }
@@ -68,7 +69,7 @@ public class PlayerInteraction : MonoBehaviour
     }
 
 
-    public I_Interactable Get_Interactable_object()// used in Playeri_intereact_ui script for display "E" button in scene//
+    public I_Interactable Get_Interactable_object()// used in Playeri_intereact_ui script for display "E" button ui in scene//
     {
         if(isInteract == false)
         {

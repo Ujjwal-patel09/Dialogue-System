@@ -1,0 +1,57 @@
+{
+  "dialogues": [
+    {
+      "Dialogue_Index": 0,
+      "character": "NPC",
+      "lines": [
+        "Hello! Who are you??"
+      ],
+      "options": [
+        {
+          "text": "I am Player.",
+          "nextDialogueIndex": 1
+        },
+        {
+          "text": "Mind your own Businees.",
+          "nextDialogueIndex": 3
+        }
+      ]
+    },
+    {
+      "Dialogue_Index": 1,
+      "character": "NPC",
+      "lines": [
+        "So you are New Here",
+        "Would you be my friend."
+      ],
+      "options": [
+        {
+          "text": "Yes Buddy.",
+          "nextDialogueIndex": 2
+        },
+        {
+          "text": "NO, i am not interested.",
+          "nextDialogueIndex": 3
+        }
+      ]
+    },
+    {
+      "Dialogue_Index": 2,
+      "character": "NPC",
+      "lines": [
+        "ok than i will contact you later",
+        "Byy."
+      ],
+      "options": []
+    },
+    {
+      "Dialogue_Index":3,
+      "character": "NPC",
+      "lines": [
+        "ok than Byy."
+      ],
+      "options": []
+    }
+
+  ]
+}
